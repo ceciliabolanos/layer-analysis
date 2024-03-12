@@ -1,7 +1,7 @@
 import os
 import json
 import argparse
-from utils import parse_textgrid, match_frames_to_intervals, remove_first_directory
+from utils_alignments import parse_textgrid, match_frames_to_intervals, remove_first_directory
 
 def main():
     
