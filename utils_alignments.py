@@ -66,3 +66,44 @@ def remove_first_directory(path):
     if len(parts) > 1:  # Check if there are enough parts to remove one
         return os.path.join(*parts[2:])  # Join the parts back together, skipping the first one
     return path
+
+
+def read_line_by_identifier(directory_path, identifier):
+    # Find the .txt file in the given directory
+    for file_name in os.listdir(directory_path):
+        if file_name.endswith('.txt'):
+            file_path = os.path.join(directory_path, file_name)
+            break
+    else:
+        return "Text file not found in the directory."
+
+    # Read the specified line from the found text file
+    with open(file_path, 'r') as file:
+        for line in file:
+            if line.startswith(identifier):
+                return line.strip().replace(identifier, '').strip()
+
+
+def match_words_to_frames(alignments, frame_length, stride, line_content):
+    """
+    Matches frame indices to word from alignments, correctly calculating
+    start and end frames based on the provided alignments.
+    """
+    # Convert frame_length and stride from milliseconds to seconds for consistency
+    frame_length_sec = frame_length / 1000.0
+    stride_sec = stride / 1000.0
+    words = {'transcript': line_content}
+    for key in alignments:
+        for xmin, xmax, text in alignments[key]:
+            # Calculate the frame index for the start and end of the interval
+            # Start frame is calculated by dividing xmin by stride_sec, because each new frame starts every stride_sec seconds
+            start_frame = int(xmin / stride_sec)
+            # End frame calculation considers the entire duration of the interval minus the frame length because
+            # the last frame that fully fits within xmax should also be included.
+            # Adjusting by frame_length_sec ensures we account for the case where xmax is exactly at the edge of a frame.
+            end_frame = int((xmax - frame_length_sec) / stride_sec) if (xmax - frame_length_sec) > 0 else 0
+            if key == 'words':
+                if text not in words:
+                   words[text] = []
+                words[text].append((start_frame, end_frame))
+    return words

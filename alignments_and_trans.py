@@ -1,7 +1,7 @@
 import os
 import json
 import argparse
-from utils_alignments import parse_textgrid, match_frames_to_intervals, remove_first_directory
+from utils_alignments import parse_textgrid, match_words_to_frames, remove_first_directory, read_line_by_identifier
 
 def main():
     
@@ -21,11 +21,8 @@ def main():
 
 
     # Dictionary to hold the results
-    words_dict = {}
-    phones_dict = {}
-    words_counts_dict = {}
-    phones_counts_dict = {}
-
+    audio_dict = {}
+    
     # Walk through the directory, and process each TextGrid file
     for root, dirs, files in os.walk(alignments_dir):
         for file in files:
@@ -35,25 +32,15 @@ def main():
                 # Parse the TextGrid file to get alignments
                 alignments = parse_textgrid(textgrid_path)
                 root1 = remove_first_directory(root)
-                # Construct the final path with the modified root (root1) and replacing extension with '.flac'
-                path = os.path.join(root1, os.path.splitext(file)[0] + '.flac')
-                
-                words, phones = match_frames_to_intervals(alignments, frame_length, stride, path, words_dict, phones_dict,
-                                                           words_counts_dict, phones_counts_dict)
-
+                path = os.path.splitext(file)[0]
+                path_to_transcript = os.path.join('librispeech_data', root1)
+                line_content = read_line_by_identifier(path_to_transcript, path)
+                words = match_words_to_frames(alignments, frame_length, stride, line_content)
+                audio_dict[os.path.join(path_to_transcript, path)] = words
 
     # Saving the results to a JSON file
-    with open('words.json', 'w') as json_file:
-        json.dump(words_dict, json_file, ensure_ascii=False, indent=4)
-
-    with open('phones.json', 'w') as json_file:
-        json.dump(phones_dict, json_file, ensure_ascii=False, indent=4)
-
-    with open('words_counts.json', 'w') as json_file:
-        json.dump(words_counts_dict, json_file, ensure_ascii=False, indent=4)
-
-    with open('phones_counts.json', 'w') as json_file:
-        json.dump(phones_counts_dict, json_file, ensure_ascii=False, indent=4)
+    with open('words_and_phrase.json', 'w') as json_file:
+        json.dump(audio_dict, json_file, ensure_ascii=False, indent=4)
 
 
 if __name__ == '__main__':

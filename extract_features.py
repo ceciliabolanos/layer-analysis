@@ -19,8 +19,8 @@ def main():
 
     parser.add_argument('--model', type=str, required=False, help='', default="wav2vec") 
     parser.add_argument('--path', type=str, required=False, help='path to words or phones file', default='words.json') 
-    parser.add_argument('--path_counts', type=str, required=False, help='path to words or phones counts file', default='words_counts.json') 
-    parser.add_argument('--select', type=str, required=False, help='path to phones file', default='words')
+    parser.add_argument('--path_counts', type=str, required=False, help='path to words or phones counts file', default='phones_counts.json') 
+    parser.add_argument('--select', type=str, required=False, help='words or phones', default='phones')
     parser.add_argument('--audio_dir', type=str, required=False, help='Directory containing the audio files', default='./librispeech_data')  
     parser.add_argument('--device', type=str, required=False, default='cpu')      
     args = parser.parse_args()
