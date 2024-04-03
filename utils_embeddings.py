@@ -13,6 +13,7 @@ def get_embeddings_nlp(encoded_input, model, device):
         output = model(**encoded_input)
         reps  = output.hidden_states
         # all_attentions_states = output.attentions
+        
     return reps 
 
 
@@ -36,6 +37,7 @@ def get_embeddings_speech(audio_path, model, device):
     waveform = waveform.to(device)  # or 'cuda' if using GPU
     with torch.no_grad():
         reps = model(waveform)["hidden_states"]
+  
     return reps 
 
 

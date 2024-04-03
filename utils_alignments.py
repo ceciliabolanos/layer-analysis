@@ -64,7 +64,7 @@ def match_frames_to_intervals(alignments, frame_length, stride, path, words, pho
 def remove_first_directory(path):
     parts = path.split(os.path.sep)  # Split the path into parts
     if len(parts) > 1:  # Check if there are enough parts to remove one
-        return os.path.join(*parts[2:])  # Join the parts back together, skipping the first one
+        return os.path.join(*parts[3:])  # Join the parts back together, skipping the first two
     return path
 
 
@@ -92,7 +92,7 @@ def match_words_to_frames(alignments, frame_length, stride, line_content):
     # Convert frame_length and stride from milliseconds to seconds for consistency
     frame_length_sec = frame_length / 1000.0
     stride_sec = stride / 1000.0
-    words = {'transcript': line_content}
+    words = {'transcript_audio': line_content}
     for key in alignments:
         for xmin, xmax, text in alignments[key]:
             # Calculate the frame index for the start and end of the interval
@@ -104,6 +104,6 @@ def match_words_to_frames(alignments, frame_length, stride, line_content):
             end_frame = int((xmax - frame_length_sec) / stride_sec) if (xmax - frame_length_sec) > 0 else 0
             if key == 'words':
                 if text not in words:
-                   words[text] = []
+                   words[text] = [] 
                 words[text].append((start_frame, end_frame))
     return words
