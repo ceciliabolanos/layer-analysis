@@ -9,6 +9,7 @@ def get_embeddings_nlp(encoded_input, model, device):
      Get all the hidden_states for a nlp input
     """
     # Get hidden states from all layers
+    encoded_input = {key: val.to(device) for key, val in encoded_input.items()}
     with torch.no_grad():
         output = model(**encoded_input)
         reps  = output.hidden_states
