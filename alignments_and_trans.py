@@ -21,7 +21,7 @@ def main():
 
     audio_dict = {}
     
-    # Walk through the directory, and process each TextGrid file
+    # Process each Textgrid fileWalk through the directory, and process each TextGrid file
     for root, dirs, files in os.walk(alignments_dir):
         for file in files:
             if file.endswith(".TextGrid"):
