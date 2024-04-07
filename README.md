@@ -31,6 +31,13 @@ Step by step instructions:
      python3 speech_embedding.py --model wav2vec2 --path 'audio_alignments.json' --device 'cuda'
      ```
 
+1. Obtain Glove embeddings by executing glove_embedding.py with input path as argument. This script outputs a JSON file with Glove embeddings for each word in each audio.
+
+- Command: 
+     ```
+     python3 glove_embedding.py --path 'audio_alignments.json'
+     ```
+
 1. Obtain NLP embeddings by executing nlp_embedding.py with the model, input path, and device as arguments. This script outputs a JSON file with NLP embeddings for each word in each audio, averaged over all tokens of the word.
 
 - Command: 

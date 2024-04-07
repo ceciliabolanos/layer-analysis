@@ -28,43 +28,10 @@ def parse_textgrid(textgrid_path):
     
     return alignments
 
-
-def match_frames_to_intervals(alignments, frame_length, stride, path, words, phones, words_counts, phones_counts):
-    """
-    Matches frame indices to the intervals from alignments for words and phones, correctly calculating
-    start and end frames based on the provided alignments.
-    """
-    # Convert frame_length and stride from milliseconds to seconds for consistency
-    frame_length_sec = frame_length / 1000.0
-    stride_sec = stride / 1000.0
-
-    for key in alignments:
-        for xmin, xmax, text in alignments[key]:
-            # Calculate the frame index for the start and end of the interval
-            # Start frame is calculated by dividing xmin by stride_sec, because each new frame starts every stride_sec seconds
-            start_frame = int(xmin / stride_sec)
-            # End frame calculation considers the entire duration of the interval minus the frame length because
-            # the last frame that fully fits within xmax should also be included.
-            # Adjusting by frame_length_sec ensures we account for the case where xmax is exactly at the edge of a frame.
-            end_frame = int((xmax - frame_length_sec) / stride_sec) if (xmax - frame_length_sec) > 0 else 0
-            if key == 'phones':
-                if text not in phones:
-                   phones[text] = []
-                   phones_counts[text] = 0
-                phones[text].append((start_frame, end_frame, path))
-                phones_counts[text] += 1
-            if key == 'words':
-                if text not in words:
-                   words[text] = []
-                   words_counts[text] = 0
-                words[text].append((start_frame, end_frame, path))
-                words_counts[text] += 1
-    return words, phones
-
 def remove_first_directory(path):
-    parts = path.split(os.path.sep)  # Split the path into parts
-    if len(parts) > 1:  # Check if there are enough parts to remove one
-        return os.path.join(*parts[3:])  # Join the parts back together, skipping the first two
+    parts = path.split(os.path.sep)  
+    if len(parts) > 1:  
+        return os.path.join(*parts[3:])  
     return path
 
 
@@ -98,12 +65,10 @@ def match_words_to_frames(alignments, frame_length, stride, line_content):
             # Calculate the frame index for the start and end of the interval
             # Start frame is calculated by dividing xmin by stride_sec, because each new frame starts every stride_sec seconds
             start_frame = int(xmin / stride_sec)
-            # End frame calculation considers the entire duration of the interval minus the frame length because
-            # the last frame that fully fits within xmax should also be included.
-            # Adjusting by frame_length_sec ensures we account for the case where xmax is exactly at the edge of a frame.
-            end_frame = int((xmax - frame_length_sec) / stride_sec) if (xmax - frame_length_sec) > 0 else 0
+            end_frame = int(xmax / stride_sec) if xmax > 0 else 0
             if key == 'words':
                 if text not in words:
                    words[text] = [] 
                 words[text].append((start_frame, end_frame))
     return words
+

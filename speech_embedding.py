@@ -1,8 +1,9 @@
 import os
 import json
-from utils_embeddings import get_embedding_across_layers, get_embeddings_speech, save_json_with_new_embedding
+from utils_embeddings import get_embedding_across_layers, get_embeddings_speech, save_json_with_embedding
 import s3prl.hub as hub
 import argparse
+from tqdm import tqdm
 
 """
 Info that I've learned from sp3prl:
@@ -25,34 +26,26 @@ def main():
     with open(args.path, 'r') as f:
         data = json.load(f)
 
-    model = getattr(hub, args.model)()  # build the Wav2Vec 2.0 model with pre-trained weights
-    device = args.device # or cuda
-    model = model.to(device)
+    model = getattr(hub, args.model)()  # build the model with pre-trained weights
+    model = model.to(args.device)
 
-    chunk_size = 100
-    data_chunks = [dict(list(data.items())[i:i + chunk_size]) for i in range(0, len(data), chunk_size)]
-
-    # Process each word and save its averaged embeddings
-    for idx, chunk in enumerate(data_chunks):
-        output_file = os.path.join('../experiments', f'embeddings_{args.model}_words_chunk{idx}.json')  # Update output file name with chunk identifier
-        i = 0
-        for audio, items in chunk.items():
-            embeddings_audio = {}
-            audio_path = os.path.join(audio + '.flac')
-            reps = get_embeddings_speech(audio_path, model, device)
-            for word, intervals in items.items():
-                if word != 'transcript_audio':
-                    embeddings_list = []
-                    for start_frame, end_frame in intervals:
-                        # Get averaged embedding from start frame to end frame
-                        embeddings_per_layer = get_embedding_across_layers(start_frame, end_frame, reps)
-                        embeddings_as_lists = [emb.tolist() for emb in embeddings_per_layer]
-                        embeddings_list.append(embeddings_as_lists)
-                    embeddings_audio[word] = embeddings_list    
-            print(f'terminé: {i}')        
-            i += 1
-            save_json_with_new_embedding(output_file, audio, embeddings_audio)
-        print(f'terminé {idx}')
+    # For every audio, process each word and save its averaged embeddings   
+    for audio, items in tqdm(data.items(), desc="Processing audio files"):
+        embeddings_audio = {}
+        audio_path = os.path.join(audio + '.flac')
+        reps = get_embeddings_speech(audio_path, model, args.device)
+        for word, intervals in items.items():
+            if word != 'transcript_audio':
+                embeddings_list = []
+                for start_frame, end_frame in intervals:
+                    # Get averaged embedding from start frame to end frame
+                    embeddings_per_layer = get_embedding_across_layers(start_frame, end_frame, reps)
+                    embeddings_as_lists = [emb.tolist() for emb in embeddings_per_layer]
+                    embeddings_list.append(embeddings_as_lists)
+                embeddings_audio[word] = embeddings_list  
+        audio_name = audio.split('/')[-1]          
+        output_file = os.path.join('../experiments', f'embeddings_{args.model}_words_{audio_name}.json')       
+        save_json_with_embedding(output_file, audio_name, embeddings_audio)
 
 if __name__ == '__main__':
     main()

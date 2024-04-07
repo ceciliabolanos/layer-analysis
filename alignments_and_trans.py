@@ -21,18 +21,16 @@ def main():
 
     audio_dict = {}
     
-    # Process each Textgrid fileWalk through the directory, and process each TextGrid file
+    # Process each Textgrid file
     for root, dirs, files in os.walk(alignments_dir):
         for file in files:
             if file.endswith(".TextGrid"):
-                # Construct the path to the TextGrid file
                 textgrid_path = os.path.join(root, file)
-                # Parse the TextGrid file to get alignments
                 alignments = parse_textgrid(textgrid_path)
                 root1 = remove_first_directory(root)
                 path = os.path.splitext(file)[0]
                 path_to_transcript = os.path.join('../datasets/librispeech-raw', root1)
-                line_content = read_line_by_identifier(path_to_transcript, path)
+                line_content = read_line_by_identifier(path_to_transcript, path) # phrase 
                 words = match_words_to_frames(alignments, frame_length, stride, line_content)
                 audio_dict[os.path.join(path_to_transcript, path)] = words
 

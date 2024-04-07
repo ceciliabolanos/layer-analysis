@@ -2,21 +2,29 @@ import torchaudio
 import torch
 import json
 import torch
-
+import numpy as np
 
 def get_embeddings_nlp(encoded_input, model, device):
     """
-     Get all the hidden_states for a nlp input
+     Get all the hidden_states (all layers) for a nlp input
     """
-    # Get hidden states from all layers
     encoded_input = {key: val.to(device) for key, val in encoded_input.items()}
     with torch.no_grad():
         output = model(**encoded_input)
         reps  = output.hidden_states
-        # all_attentions_states = output.attentions
-        
+        # all_attentions_states = output.attentions    
     return reps 
 
+def get_embeddings_speech(audio_path, model, device):
+    """
+     Get all the hidden_states for a specific audio
+    """
+    waveform, sample_rate = torchaudio.load(audio_path)
+    waveform = waveform.to(device) 
+    with torch.no_grad():
+        reps = model(waveform)["hidden_states"]
+  
+    return reps 
 
 def get_embedding_across_layers(start_frame, end_frame, reps):
     """
@@ -30,30 +38,17 @@ def get_embedding_across_layers(start_frame, end_frame, reps):
         averaged_reps.append(averaged_rep)
     return averaged_reps    
 
-def get_embeddings_speech(audio_path, model, device):
-    """
-     Get all the hidden_states for a specific audio
-    """
-    waveform, sample_rate = torchaudio.load(audio_path)
-    waveform = waveform.to(device)  # or 'cuda' if using GPU
-    with torch.no_grad():
-        reps = model(waveform)["hidden_states"]
-  
-    return reps 
 
-
-def save_json_with_new_embedding(fname, audio, embeddings):
-    # Load existing data
+def save_json_with_embedding(fname, audio, embeddings):
+    """Save Json with the embedding of each word/phone of an audio"""
     try:
         with open(fname, "r") as f:
             data = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        data = {}  # If file doesn't exist or is empty, start with an empty dict
+        data = {}  
 
-    # Update with embeddings for each word inside an audio
     data[audio] = embeddings
 
-    # Save back to file
     with open(fname, "w") as f:
         json.dump(data, f, indent=4)
 
@@ -84,3 +79,28 @@ def match_word_to_tokens(word_ids, word_list):
                 else:
                     match_word[word].append([i])            
     return match_word 
+
+def load_glove_embeddings(file_path):
+    embeddings_dict = {}
+    with open(file_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            values = line.split()
+            word = values[0]
+            vector = np.asarray(values[1:], "float32")
+            embeddings_dict[word] = vector
+    return embeddings_dict
+
+
+
+def get_embeddings_glove(input_text, glove_embeddings):
+    words = input_text.split()
+    
+    # Retrieve the embedding for each word
+    embeddings = {}
+    for word in words:
+        embedding = glove_embeddings.get(word)
+        if embedding is not None:
+            # Convert numpy array to list and create 12 separate copies
+            embeddings[word] = [embedding.tolist() for _ in range(12)]
+
+    return embeddings   
