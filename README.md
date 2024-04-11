@@ -6,11 +6,6 @@ pip install torchaudio
 pip install chardet
 pip install PySoundFile librosa
 
-Esto esta en pausa xq ahora lo obtenemos de otra forma
-To get the alignments: 
-
-python3 read_alignments_librispeech.py 
-python3 extract_features.py
 
 
 # Embeddings
@@ -44,3 +39,18 @@ Step by step instructions:
      ```
      python3 nlp_embedding.py --model bert-base-uncased --path 'audio_alignments.json' --device 'cuda'
      ```
+
+ Once we have the embedding for each word in each audio we need to compute the matrix of all the embeddings for a specific audio. This is because we want to compare how similare are these representations when we change the layer or the model comparison. For doing that we can run   
+
+ Command: 
+     ```
+     python3 embeddings_matrix.py
+     ```  
+
+ With this ready, we can play a little with some experiments like CKA.
+
+  Command: 
+     ```
+     python3 experiment_CKA.py --model1 'wav2vec2' --layer1 24 --model2 'bert-base-uncased' --layer2 12 
+     ```  
+  This generates a matrix with the linear CKA score for each pair of layers.

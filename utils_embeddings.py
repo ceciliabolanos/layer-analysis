@@ -93,14 +93,15 @@ def load_glove_embeddings(file_path):
 
 
 def get_embeddings_glove(input_text, glove_embeddings):
-    words = input_text.split()
     
-    # Retrieve the embedding for each word
+    """Retrieve a dictionary with the embeddings for each word in input_text"""
+
+    words = input_text.split()
     embeddings = {}
     for word in words:
         embedding = glove_embeddings.get(word)
         if embedding is not None:
-            # Convert numpy array to list and create 12 separate copies
+            # Convert numpy array to list and create 12 separate copies to compare with 12 layers of transformers
             embeddings[word] = [embedding.tolist() for _ in range(12)]
 
     return embeddings   

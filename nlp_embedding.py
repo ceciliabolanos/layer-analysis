@@ -50,7 +50,7 @@ def main():
                         embeddings_list.append(embeddings_as_lists)
                     embeddings_audio[word] = embeddings_list 
         audio_name = audio.split('/')[-1]          
-        output_file = os.path.join('../experiments', f'embeddings_{args.model}_words_{audio_name}.json')         
+        output_file = os.path.join(f'../experiments/{args.model}', f'embeddings_words_{audio_name}.json')         
         save_json_with_embedding(output_file, audio_name, embeddings_audio)
         
 
