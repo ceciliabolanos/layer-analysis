@@ -105,3 +105,13 @@ def get_embeddings_glove(input_text, glove_embeddings):
             embeddings[word] = [embedding.tolist() for _ in range(12)]
 
     return embeddings   
+
+
+def linear_CKA(X, Y):
+    X_centered = X - X.mean(axis=0)
+    Y_centered = Y - Y.mean(axis=0)
+    hsic = np.linalg.norm(X_centered.T @ Y_centered, 'fro') ** 2
+    var1 = np.linalg.norm(X_centered.T @ X_centered, 'fro')
+    var2 = np.linalg.norm(Y_centered.T @ Y_centered, 'fro')
+
+    return hsic / (var1 * var2)

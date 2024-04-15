@@ -23,8 +23,8 @@ def main():
     
     # Process each Textgrid file
     for root, dirs, files in os.walk(alignments_dir):
-        for file in files:
-            if file.endswith(".TextGrid"):
+        for file in files :
+            if (file.endswith(".TextGrid")) & ('test-clean' not in root):
                 textgrid_path = os.path.join(root, file)
                 alignments = parse_textgrid(textgrid_path)
                 root1 = remove_first_directory(root)

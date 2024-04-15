@@ -22,7 +22,9 @@ def main():
             if key == 'transcript_audio':
                 embeddings_audio = get_embeddings_glove(input_text.lower(), glove_embeddings)
                 audio_name = audio.split('/')[-1]          
-                output_file = os.path.join('../experiments/glove', f'embeddings_words_{audio_name}.json')         
+                output_dir = os.path.join('../experiments/glove')
+                output_file = os.path.join(output_dir, f'embeddings_words_{audio_name}.json')
+                os.makedirs(output_dir, exist_ok=True)         
                 save_json_with_embedding(output_file, audio_name, embeddings_audio)
 
 if __name__ == '__main__':
