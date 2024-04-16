@@ -51,6 +51,6 @@ Step by step instructions:
 
   Command: 
      ```
-     python3 experiment_CKA.py --model1 'bert-base-uncased' --layer1 12 --model2 'wav2vec2' --layer2 12 
+     python3 experiment_CKA.py --model1 'bert-base-uncased' --layer1 12 --model2 'wav2vec2_large_960' --layer2 24
      ```  
   This generates a matrix with the linear CKA score for each pair of layers.

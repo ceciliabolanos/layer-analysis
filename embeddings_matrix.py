@@ -8,8 +8,8 @@ def main():
 
     def process_embedding_files_and_create_matrices(directory, layer, model1, model2, model3):
         model1_vectors = []
-        model2_vectors = []
-        model3_vectors = []
+        #model2_vectors = []
+        #model3_vectors = []
         files = sorted(os.listdir(os.path.join(directory, model1)))
        
         for filename in tqdm(files):
@@ -33,29 +33,29 @@ def main():
                     common_keys = sorted(common_keys) 
                     for key in common_keys:
                         model1_vector = model1_data[audio][key][0][layer]
-                        model2_vector = model2_data[audio][key][layer]
-                        model3_vector = model3_data[audio][key][0][layer]
+                        #model2_vector = model2_data[audio][key][layer]
+                        #model3_vector = model3_data[audio][key][0][layer]
                        
                         model1_vectors.append(model1_vector)
-                        model2_vectors.append(model2_vector)
-                        model3_vectors.append(model3_vector)
+                        #model2_vectors.append(model2_vector)
+                        #model3_vectors.append(model3_vector)
                     
 
         # Save the lists to JSON files
         
         with open(os.path.join('..', 'experiments', 'layers', f'embeddings_layer{layer}_{model1}.json'), 'w') as f:
             json.dump(model1_vectors, f) 
-            
+
+    '''   
         with open(os.path.join('..', 'experiments', 'layers', f'embeddings_layer{layer}_{model2}.json'), 'w') as f:
             json.dump(model2_vectors, f)
 
         with open(os.path.join('..', 'experiments', 'layers', f'embeddings_layer{layer}_{model3}.json'), 'w') as f:
             json.dump(model3_vectors, f)
-                
-        return model1_vectors, model2_vectors, model3_vectors                    
+    '''                             
 
-    for i in tqdm(range(12)):
-        process_embedding_files_and_create_matrices('../experiments', layer=i, model1='wav2vec2', model2='glove', model3='bert-base-uncased')
+    for i in tqdm(range(18,24)):
+        process_embedding_files_and_create_matrices('../experiments', layer=i, model1='wav2vec2_large_960', model2='glove', model3='bert-base-uncased')
 
 
 if __name__ == '__main__':
