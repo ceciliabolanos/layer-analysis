@@ -6,8 +6,6 @@ pip install torchaudio
 pip install chardet
 pip install PySoundFile librosa
 
-
-
 # Embeddings
 
 Step by step instructions:
