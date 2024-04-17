@@ -45,17 +45,16 @@ def main():
         
         with open(os.path.join('..', 'experiments', 'layers', f'embeddings_layer{layer}_{model1}.json'), 'w') as f:
             json.dump(model1_vectors, f) 
-
-    '''   
+   
         with open(os.path.join('..', 'experiments', 'layers', f'embeddings_layer{layer}_{model2}.json'), 'w') as f:
             json.dump(model2_vectors, f)
 
         with open(os.path.join('..', 'experiments', 'layers', f'embeddings_layer{layer}_{model3}.json'), 'w') as f:
             json.dump(model3_vectors, f)
-    '''                             
+                          
 
-    for i in tqdm(range(18,24)):
-        process_embedding_files_and_create_matrices('../experiments', layer=i, model1='wav2vec2_large_960', model2='glove', model3='bert-base-uncased')
+    for i in tqdm(range(12)):
+        process_embedding_files_and_create_matrices('../experiments', layer=i, model1='wav2vec2', model2='glove', model3='bert-base-uncased')
 
 
 if __name__ == '__main__':
