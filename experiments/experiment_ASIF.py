@@ -37,9 +37,9 @@ def main():
     nlp_new = np.delete(nlp, rows_to_delete, axis=0)
     keys_new = np.delete(keys, rows_to_delete)
     
-    p = 1
+    p = 8
     size = n - int(n*0.1)
-    k = int(n*0.9*0.1) 
+    k = 800
     print(int(n*0.1), k, size) 
 
     # Process nlp similatiry matrix
