@@ -30,12 +30,12 @@ def main():
                 root1 = remove_first_directory(root)
                 path = os.path.splitext(file)[0]
                 path_to_transcript = os.path.join('../datasets/librispeech-raw', root1)
-                line_content = read_line_by_identifier(path_to_transcript, path) # phrase 
+                line_content = read_line_by_identifier(path_to_transcript, path) # get the audio transcript 
                 words = match_words_to_frames(alignments, frame_length, stride, line_content)
                 audio_dict[os.path.join(path_to_transcript, path)] = words
 
-    # Saving the results to a JSON file
-    with open('audio_alignments.json', 'w') as json_file:
+
+    with open('alignments/audio_alignments.json', 'w') as json_file:
         json.dump(audio_dict, json_file, ensure_ascii=False, indent=4)
 
 

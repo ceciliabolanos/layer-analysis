@@ -19,7 +19,7 @@ def main():
     parser = argparse.ArgumentParser(description='')
 
     parser.add_argument('--model', type=str, required=False, help='', default="bert-base-uncased") 
-    parser.add_argument('--path', type=str, required=False, help='path to words file', default='audio_alignments.json') 
+    parser.add_argument('--path', type=str, required=False, help='path to words file', default='alignments/audio_alignments.json') 
     parser.add_argument('--device', type=str, required=False, default='cuda')      
     args = parser.parse_args()
 

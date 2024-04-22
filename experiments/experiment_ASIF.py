@@ -6,14 +6,13 @@ from torchmetrics.functional.pairwise import pairwise_cosine_similarity
 import gc
 import argparse
 from tqdm import tqdm
-#../experiments/layers/
 
 def main():
 
     parser = argparse.ArgumentParser(description='')
 
-    parser.add_argument('--path_layer1', type=str, default='embeddings_layer6_wav2vec2.json') 
-    parser.add_argument('--path_layer2', type=str, default='embeddings_layer3_bert-base-uncased.json') 
+    parser.add_argument('--path_layer1', type=str, default='../experiments/layers/embeddings_layer6_wav2vec2.json') 
+    parser.add_argument('--path_layer2', type=str, default='../experiments/layers/embeddings_layer3_bert-base-uncased.json') 
     parser.add_argument('--keys', type=str, default='words_in_order.json') 
     args = parser.parse_args()
 
@@ -31,9 +30,9 @@ def main():
     n = audio.shape[0]
 
     # Delete 10% of the observations for testing
-    np.random.seed(42) 
+    np.random.seed(2211) 
     rows_to_delete = np.random.choice(n, int(n*0.1), replace=False)
-    deleted_rows = audio[rows_to_delete]  # Save the rows you're about to delete
+    deleted_rows = audio[rows_to_delete]  # Save the rows we're about to delete
     audio_new = np.delete(audio, rows_to_delete, axis=0)
     nlp_new = np.delete(nlp, rows_to_delete, axis=0)
     keys_new = np.delete(keys, rows_to_delete)
@@ -63,7 +62,6 @@ def main():
 
         del output, zero_matrix
         gc.collect()
-    
 
     batch_size = 1000  
     for j in tqdm(range(int(n*0.1))):
@@ -77,11 +75,13 @@ def main():
             similarity_results.extend(similarity.cpu())
         full_similarity = torch.cat(similarity_results, dim=0)    
         values, indices = torch.topk(full_similarity, k=6)
-        print(f'palabra a pedir {keys[rows_to_delete[j]]}, palabra obtenida {keys_new[indices[0]]}') 
         retrieval.append([keys[rows_to_delete[j]], [keys_new[index.item()] for index in indices]])
-
-    with open(os.path.join('retrieval.json'), 'w') as f:
-        json.dump(retrieval, f)     
+    
+    info = {'words_retrieval': retrieval,
+            'rows_deleted': rows_to_delete.tolist()}
+    
+    with open(os.path.join('results',f'retrieval_p{p}_k{k}.json'), 'w') as f:
+        json.dump(info, f)     
 
 if __name__ == '__main__':
     main()

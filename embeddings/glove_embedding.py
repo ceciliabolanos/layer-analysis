@@ -7,7 +7,7 @@ from tqdm import tqdm
 def main():
     
     parser = argparse.ArgumentParser(description='')
-    parser.add_argument('--path', type=str, required=False, help='path to words file', default='audio_alignments.json') 
+    parser.add_argument('--path', type=str, required=False, help='path to words file', default='alignments/audio_alignments.json') 
     args = parser.parse_args()
 
     with open(args.path, 'r') as f:
