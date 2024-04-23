@@ -29,10 +29,10 @@ def main():
 
     n = audio.shape[0]
 
-    # Delete 10% of the observations for testing
+    # Eliminamos el 10% de las filas para retrieval
     np.random.seed(2211) 
     rows_to_delete = np.random.choice(n, int(n*0.1), replace=False)
-    deleted_rows = audio[rows_to_delete]  # Save the rows we're about to delete
+    deleted_rows = audio[rows_to_delete]  # Guardamos los indices de las filas eliminadas
     audio_new = np.delete(audio, rows_to_delete, axis=0)
     nlp_new = np.delete(nlp, rows_to_delete, axis=0)
     keys_new = np.delete(keys, rows_to_delete)
@@ -42,7 +42,7 @@ def main():
     k = 800
     print(int(n*0.1), k, size) 
 
-    # Process nlp similatiry matrix
+    # Procesamos matriz de similaridad de nlp
     
     large_matrix = torch.zeros(size, size, dtype=torch.float32, device='cpu')
     audio_new = torch.from_numpy(audio_new)
@@ -62,11 +62,12 @@ def main():
 
         del output, zero_matrix
         gc.collect()
-
-    batch_size = 1000  
+     
+    # Hacemos retrieval de palabra
+    batch_size = 10000
     for j in tqdm(range(int(n*0.1))):
         audio_rep = torch.from_numpy(deleted_rows[j])
-        relative_rep = pairwise_cosine_similarity(audio_rep.unsqueeze(0).double(), audio_new)
+        relative_rep = pairwise_cosine_similarity(audio_rep.unsqueeze(0).double(), audio_new) # Representacion relativa de input
         similarity_results = []
         for i in range(0, size, batch_size):
             end = min(i + batch_size, size)
