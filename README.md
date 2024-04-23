@@ -46,6 +46,11 @@ Step by step instructions:
 
  With this ready, we can play a little with some experiments like CKA.
 
+
+# Experiments instructions
+
+Step by step instructions:
+
   Command: 
      ```
      python3 experiments/experiment_CKA.py --model1 'bert-base-uncased' --layer1 12 --model2 'wav2vec2_large_960' --layer2 24
