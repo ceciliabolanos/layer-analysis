@@ -14,8 +14,8 @@ def main():
 
     def process_embedding_files_and_create_matrices(directory, layer, model1, words_path):
         model1_vectors = []
-        with open(words_path, 'r'):
-           words = json.load(words_path)
+        with open(words_path, 'r') as file:
+           words = json.load(file)
 
         files = sorted(os.listdir(os.path.join(directory, model1)))
        
@@ -25,19 +25,23 @@ def main():
         
             with open(model1_path, 'r') as model1_file:
                 model1_data = json.load(model1_file)
-                audio, _ = os.path.splitext(identifier)
-                common_keys = words[identifier]
+            
+            audio, _ = os.path.splitext(identifier)
+            common_keys = words[identifier]
                 
-                for key in common_keys:
-                    if model1 == 'glove':
-                        model1_vector = model1_data[audio][key][layer]
-                    else:
-                        model1_vector = model1_data[audio][key][0][layer]    
+            for key in common_keys:
+                if model1 == 'glove':
+                    model1_vector = model1_data[audio][key][layer]
+                else:
+                    model1_vector = model1_data[audio][key][0][layer]    
 
-                    model1_vectors.append(model1_vector)
+                model1_vectors.append(model1_vector)
           
-        with open(os.path.join('..', 'experiments', 'layers', f'embeddings_layer{layer}_{model1}.json'), 'w') as f:
+        with open(os.path.join('..', 'experiments', 'layers', f'aembeddings_layer{layer}_{model1}.json'), 'w') as f:
             json.dump(model1_vectors, f) 
 
     
-    process_embedding_files_and_create_matrices('../experiments', layer=args.layer, model1=args.model, words_path=args.words_paths)
+    process_embedding_files_and_create_matrices('../experiments', layer=args.layer, model1=args.model, words_path=args.words_path)
+
+if __name__ == "__main__":
+    main()

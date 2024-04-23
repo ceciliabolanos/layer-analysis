@@ -41,7 +41,7 @@ Step by step instructions:
  Once we have the embedding for each word in each audio we need to compute the matrix of all the embeddings for every audio. This is because we want to compare how similare are these representations when we change the layer or the model comparison. For doing that we can run. 
  Command: 
      ```
-     python3 embeddings/matrix_embeddings.py --layer 5 --model 'wav2vec2' --words 'words_in_order1'
+     python3 embeddings/matrix_embeddings.py --layer 5 --model 'wav2vec2' --words_path 'words_in_order1.json'
      ```  
 
  With this ready, we can play a little with some experiments like CKA.
