@@ -62,7 +62,11 @@ def main():
 
         del output, zero_matrix
         gc.collect()
-     
+        
+    # Norrmalizamos
+    norms = large_matrix.norm(p=2, dim=1, keepdim=True)
+    large_matrix_normalized = large_matrix / norms
+    
     # Hacemos retrieval de palabra
     batch_size = 10000
     for j in tqdm(range(int(n*0.1))):
@@ -71,7 +75,7 @@ def main():
         similarity_results = []
         for i in range(0, size, batch_size):
             end = min(i + batch_size, size)
-            batch = large_matrix[i:end, :] 
+            batch = large_matrix_normalized[i:end, :] 
             similarity = pairwise_cosine_similarity(relative_rep.float(), batch)
             similarity_results.extend(similarity.cpu())
         full_similarity = torch.cat(similarity_results, dim=0)    
@@ -81,7 +85,7 @@ def main():
     info = {'words_retrieval': retrieval,
             'rows_deleted': rows_to_delete.tolist()}
     
-    with open(os.path.join('results',f'retrieval_p{p}_k{k}.json'), 'w') as f:
+    with open(os.path.join('results',f'retrieval_a_p{p}_k{k}.json'), 'w') as f:
         json.dump(info, f)     
 
 if __name__ == '__main__':

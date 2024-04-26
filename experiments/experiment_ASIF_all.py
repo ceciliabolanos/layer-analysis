@@ -23,9 +23,9 @@ def main():
             audio = np.array(json.load(f))
             n = audio.shape[0]    
         if h == 11:
-            l = 5
+            l = 4
         else:
-            l = 4 
+            l = 3 
         print(h, l)       
         path_layer2 = f'../experiments/layers/embeddings_layer{l}_bert-base-uncased.json'
         with open(path_layer2, 'r') as f:
