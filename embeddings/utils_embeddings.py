@@ -26,6 +26,17 @@ def get_embeddings_speech(audio_path, model, device):
   
     return reps 
 
+def get_embeddings_audio(audio_path, model, device):
+    """
+     Get all the hidden_states for a specific audio
+    """
+    waveform, sample_rate = torchaudio.load(audio_path)
+    waveform = waveform.to(device) 
+    with torch.no_grad():
+        reps = model.extract_activations_from_array(waveform) 
+  
+    return reps 
+
 def get_embedding_across_layers(start_frame, end_frame, reps):
     """
      Get the embedding across all layers related to some word or phone for a specific model.
@@ -38,6 +49,17 @@ def get_embedding_across_layers(start_frame, end_frame, reps):
         averaged_reps.append(averaged_rep)
     return averaged_reps    
 
+def get_embedding_across_layers_audio(start_frame, end_frame, reps):
+    """
+     Get the embedding across all layers related to some word or phone for a specific model.
+     This is calculated as the mean between the embeddings from start_frame to end_frame included (from alignment)
+    """
+    averaged_reps = []
+    for i in range(0, len(reps)): 
+        # Extract the relevant frames and calculate their mean
+        averaged_rep = reps[i][start_frame:end_frame + 1].mean(axis=0)
+        averaged_reps.append(averaged_rep)
+    return averaged_reps   
 
 def save_json_with_embedding(fname, audio, embeddings):
     """Save Json with the embedding of each word/phone of an audio"""

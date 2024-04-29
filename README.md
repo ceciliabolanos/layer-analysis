@@ -38,6 +38,15 @@ Step by step instructions:
      python3 embeddings/nlp_embedding.py --model bert-base-uncased --path 'alignments/audio_alignments.json' --device 'cuda'
      ```
 
+1. Obtain Audio embeddings by executing audio_embeddings.py with the model, input path, and device as arguments. This script outputs a JSON file with EncodecMAE embeddings for each word in each audio, averaged over all tokens of the word.
+
+- Command: 
+     ```
+     python3 embeddings/audio_embeddings.py --model encodec_base --path 'alignments/audio_alignments_encodec.json' --device 'cuda'
+     ```
+
+
+
  Once we have the embedding for each word in each audio we need to compute the matrix of all the embeddings for every audio. This is because we want to compare how similare are these representations when we change the layer or the model comparison. For doing that we can run. 
  Command: 
      ```

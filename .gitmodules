@@ -1,0 +1,6 @@
+[submodule "layer-analysis/easyaudio"]
+	path = layer-analysis/easyaudio
+	url = https://github.com/mrpep/easyaudio.git
+[submodule "easyaudio"]
+	path = easyaudio
+	url = https://github.com/mrpep/easyaudio.git

@@ -8,7 +8,7 @@ def main():
     parser = argparse.ArgumentParser(description='')
 
     parser.add_argument('--frame_length', type=int, required=False, help='milliseconds', default=25) 
-    parser.add_argument('--stride', type=int, required=False, help='milliseconds', default=20)
+    parser.add_argument('--stride', type=int, required=False, help='milliseconds', default=1000/75)
     parser.add_argument('--sample_rate', type=int, required=False, help='Hz', default=16000)  
     parser.add_argument('--alignments', type=str, required=False, help='Directory containing the alignment TextGrid files', default='../datasets/alignments')      
     args = parser.parse_args()
@@ -29,13 +29,13 @@ def main():
                 alignments = parse_textgrid(textgrid_path)
                 root1 = remove_first_directory(root)
                 path = os.path.splitext(file)[0]
-                path_to_transcript = os.path.join('../datasets/librispeech-raw', root1)
+                path_to_transcript = os.path.join('../datasets/librispeech-clean-24k', root1)
                 line_content = read_line_by_identifier(path_to_transcript, path) # get the audio transcript 
                 words = match_words_to_frames(alignments, frame_length, stride, line_content)
                 audio_dict[os.path.join(path_to_transcript, path)] = words
 
 
-    with open('alignments/audio_alignments.json', 'w') as json_file:
+    with open('alignments/audio_alignments_encodec.json', 'w') as json_file:
         json.dump(audio_dict, json_file, ensure_ascii=False, indent=4)
 
 
