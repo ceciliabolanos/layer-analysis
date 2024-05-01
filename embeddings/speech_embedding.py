@@ -4,6 +4,8 @@ from utils_embeddings import get_embedding_across_layers, get_embeddings_speech,
 import s3prl.hub as hub
 import argparse
 from tqdm import tqdm
+import numpy as np
+import torch
 
 """
 Info that I've learned from sp3prl:
@@ -15,7 +17,12 @@ Info that I've learned from sp3prl:
 """
 
 def main():
-    
+
+    np.random.seed(42)
+    torch.manual_seed(42)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(42)
+        
     parser = argparse.ArgumentParser(description='')
 
     parser.add_argument('--model', type=str, required=False, help='', default="wav2vec2") 

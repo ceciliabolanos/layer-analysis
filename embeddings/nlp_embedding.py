@@ -4,6 +4,8 @@ from utils_embeddings import get_embedding_across_layers, get_embeddings_nlp, sa
 import argparse
 from transformers import BertTokenizerFast, BertModel
 from tqdm import tqdm
+import numpy as np
+import torch
 
 """
 Info that I've learned from huggingFace:
@@ -15,7 +17,10 @@ When passing output_hidden_states=True you may expect the outputs.hidden_states[
 """
 
 def main():
-    
+    np.random.seed(42)
+    torch.manual_seed(42)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(42)
     parser = argparse.ArgumentParser(description='')
 
     parser.add_argument('--model', type=str, required=False, help='', default="bert-base-uncased") 

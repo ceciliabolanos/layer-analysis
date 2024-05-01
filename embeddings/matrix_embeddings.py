@@ -37,7 +37,7 @@ def main():
 
                 model1_vectors.append(model1_vector)
           
-        with open(os.path.join('..', 'experiments', 'layers', f'aembeddings_layer{layer}_{model1}.json'), 'w') as f:
+        with open(os.path.join('..', 'experiments', 'layers', f'embeddings_layer{layer}_{model1}.json'), 'w') as f:
             json.dump(model1_vectors, f) 
 
     

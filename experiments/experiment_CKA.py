@@ -31,8 +31,6 @@ def main():
                 model2_list = json.load(f)
             model2_matrix = np.array(model2_list)
             cka_similarity[i, j] = linear_CKA(model1_matrix, model2_matrix)
-    
-    max_index = np.unravel_index(cka_similarity.argmax(), cka_similarity.shape)
       
     with open(f'cka_{args.model2}_{args.model1}.json', 'w') as f:
         json.dump(cka_similarity.tolist(), f)
@@ -44,8 +42,6 @@ def main():
     plt.ylim(0, len(cka_similarity))
     plt.savefig(f'cka_{args.model2}_{args.model1}.png', bbox_inches='tight') 
     plt.show()
-
-
 
 
 if __name__ == '__main__':

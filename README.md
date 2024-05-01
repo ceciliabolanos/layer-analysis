@@ -70,14 +70,17 @@ Una vez que obtuvimos los embeddings para cada palabra de cada archivo podemos a
 En donde tenemos que aclarar la capa que queremos representar asi como el `words_path` que indica las palabras comunes, es decir que tienen representación, a lo largo de todos los modelos.
 
 
-------------------------------------------------------------------------
+# Experimentos
 
-# Experiments instructions
 
-Step by step instructions:
+Consideramos diferentes experimentos:
 
-  Command: 
-     ```
+## Centered Kernel Alignment (CKA):
+
+Calculamos Linear_CKA(X,Y) donde X e Y son las representaciones de cada palabra para un modelo y una capa en particular. El siguiente comando devuelve este valor para todas las combinaciones de capas de los dos modelos dados. 
+
+```bash
      python3 experiments/experiment_CKA.py --model1 'bert-base-uncased' --layer1 12 --model2 'wav2vec2_large_960' --layer2 24
-     ```  
-  This generates a matrix with the linear CKA score for each pair of layers.
+``` 
+
+## ASIF:
