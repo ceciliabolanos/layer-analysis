@@ -19,7 +19,7 @@ def main():
     parser = argparse.ArgumentParser(description='')
 
     parser.add_argument('--model', type=str, required=False, help='', default="encodecmae_base") 
-    parser.add_argument('--path', type=str, required=False, help='path to words file', default='alignments/audio_alignments_encodec.json') 
+    parser.add_argument('--path', type=str, required=False, help='path to words file', default='alignments/audio_alignments_13.33_24.json') 
     parser.add_argument('--device', type=str, required=False, default='cuda')      
     args = parser.parse_args()
 
@@ -38,7 +38,7 @@ def main():
                 embeddings_list = []
                 for start_frame, end_frame in intervals:
                     # Get averaged embedding from start frame to end frame
-                    embeddings_per_layer = get_embedding_across_layers_audio(start_frame, end_frame, reps)
+                    embeddings_per_layer = get_embedding_across_layers_audio(start_frame, end_frame, reps, args.model)
                     embeddings_as_lists = [emb.tolist() for emb in embeddings_per_layer]
                     embeddings_list.append(embeddings_as_lists)
                 embeddings_audio[word] = embeddings_list  

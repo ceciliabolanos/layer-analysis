@@ -4,6 +4,7 @@ from utils_embeddings import get_embeddings_glove, save_json_with_embedding, loa
 import argparse
 from tqdm import tqdm
 
+
 def main():
     
     parser = argparse.ArgumentParser(description='')
