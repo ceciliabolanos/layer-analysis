@@ -51,13 +51,12 @@ def read_line_by_identifier(directory_path, identifier):
                 return line.strip().replace(identifier, '').strip()
 
 
-def match_words_to_frames(alignments, frame_length, stride, line_content):
+def match_words_to_frames(alignments, stride, line_content):
     """
     Matches frame indices to word from alignments, correctly calculating
     start and end frames based on the provided alignments.
     """
     # Convert frame_length and stride from milliseconds to seconds for consistency
-    frame_length_sec = frame_length / 1000.0
     stride_sec = stride / 1000.0
     words = {'transcript_audio': line_content}
     for key in alignments:

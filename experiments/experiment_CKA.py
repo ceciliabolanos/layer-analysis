@@ -5,7 +5,7 @@ import argparse
 import json
 import os
 from tqdm import tqdm
-from utils_embeddings import linear_CKA
+from embeddings.utils_embeddings import linear_CKA
 
 def main():
 

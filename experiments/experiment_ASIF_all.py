@@ -16,14 +16,18 @@ def main():
     with open(args.keys, 'r') as f:
         keys = json.load(f)
 
-    for h in tqdm(range(1,12)):
+    for h in tqdm(range(12)):
         retrieval = []
         path_layer1 = f'../experiments/layers/embeddings_layer{h}_wav2vec2.json'
         with open(path_layer1, 'r') as f:
             audio = np.array(json.load(f))
             n = audio.shape[0]    
-            
-        path_layer2 = f'../experiments/layers/embeddings_layer{h}_bert-base-uncased.json'
+        if h == 11:
+            l = 4
+        else:
+            l = 3 
+        print(h, l)       
+        path_layer2 = f'../experiments/layers/embeddings_layer{l}_bert-base-uncased.json'
         with open(path_layer2, 'r') as f:
             nlp = np.array(json.load(f))
         # Delete 10% of the observations for testing
@@ -37,8 +41,6 @@ def main():
         p = 1
         size = n - int(n*0.1)
         k = 4221
-        print(int(n*0.1), k, size) 
-
         # Process nlp similatiry matrix
         large_matrix = torch.zeros(size, size, dtype=torch.float32, device='cpu')
         audio_new = torch.from_numpy(audio_new)
@@ -76,7 +78,7 @@ def main():
         info = {'words_retrieval': retrieval,
                 'rows_deleted': rows_to_delete.tolist()}
         
-        with open(os.path.join('results',f'retrieval_w2v_{h}_bert_{h}_p{p}_k{k}.json'), 'w') as f:
+        with open(os.path.join('results',f'retrieval_w2v_{h}_bert_{l}_p{p}_k{k}.json'), 'w') as f:
             json.dump(info, f)     
 
 if __name__ == '__main__':
