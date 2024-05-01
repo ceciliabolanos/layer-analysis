@@ -1,4 +1,6 @@
 import os
+import numpy as np
+import torch
 import json
 from utils_embeddings import get_embedding_across_layers_audio, get_embeddings_audio, save_json_with_embedding
 import argparse
@@ -15,7 +17,12 @@ Info that I've learned from easyaudio:
 """
 
 def main():
-    
+
+    np.random.seed(42)
+    torch.manual_seed(42)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(42)
+
     parser = argparse.ArgumentParser(description='')
 
     parser.add_argument('--model', type=str, required=False, help='', default="encodecmae_base") 
