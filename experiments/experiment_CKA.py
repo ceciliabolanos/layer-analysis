@@ -5,6 +5,8 @@ import argparse
 import json
 import os
 from tqdm import tqdm
+import sys
+sys.path.insert(0, '../layer-analysis')
 from embeddings.utils_embeddings import linear_CKA
 
 def main():
@@ -36,7 +38,7 @@ def main():
         json.dump(cka_similarity.tolist(), f)
 
     plt.figure(figsize=(8, 6))
-    sns.heatmap(cka_similarity, annot=True, fmt=".1f", cmap='viridis', cbar_kws={'label': 'CKA (Linear)'})
+    sns.heatmap(cka_similarity, fmt=".1f", cmap='viridis', cbar_kws={'label': 'CKA (Linear)'})
     plt.xlabel(f"Layer {args.model2}")
     plt.ylabel(f"Layer {args.model1}")
     plt.ylim(0, len(cka_similarity))
