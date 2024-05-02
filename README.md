@@ -57,14 +57,14 @@ python3 embeddings/speech_embedding.py --model wav2vec2_large_960 --path 'alignm
 Actualmente el codigo soporta los modelos `encodecmae_base`, `BEATs_iter3` pero puede ser muy facilmente adaptado para calcular los embeddings de cualquier modelo implementado en https://github.com/mrpep/easyaudio. Como en los embeddings de habla, tener en cuenta la frecuencia de sampleo y el stride del modelo. Para obtener los embeddings hay que ejecutar:
 
 ```bash
-    python3 embeddings/audio_embeddings.py --model encodecmae_base --path 'alignments/audio_alignments_13.33_24.json' --device 'cuda'
+python3 embeddings/audio_embeddings.py --model encodecmae_base --path 'alignments/audio_alignments_13.33_24.json' --device 'cuda'
 ```
 
 
 Una vez que obtuvimos los embeddings para cada palabra de cada archivo podemos armarnos la "matriz" que contiene toda esta información. Eso se hace ejecutando:
 
 ```bash
-     python3 embeddings/matrix_embeddings.py --layer 5 --model 'wav2vec2' --words_path 'words_in_order1.json'
+python3 embeddings/matrix_embeddings.py --layer 5 --model 'wav2vec2' --words_path 'words_in_order1.json'
 ``` 
 
 En donde tenemos que aclarar la capa que queremos representar asi como el `words_path` que indica las palabras comunes, es decir que tienen representación, a lo largo de todos los modelos.
@@ -80,7 +80,7 @@ Consideramos diferentes experimentos:
 Calculamos Linear_CKA(X,Y) donde X e Y son las representaciones de cada palabra para un modelo y una capa en particular. El siguiente comando devuelve este valor para todas las combinaciones de capas de los dos modelos dados. 
 
 ```bash
-     python3 experiments/experiment_CKA.py --model1 'bert-base-uncased' --layer1 12 --model2 'wav2vec2_large_960' --layer2 24
+python3 experiments/experiment_CKA.py --model1 'bert-base-uncased' --layer1 12 --model2 'wav2vec2_large_960' --layer2 24
 ``` 
 
 ## ASIF:
