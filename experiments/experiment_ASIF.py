@@ -2,10 +2,9 @@ import os
 import json
 import torch
 import numpy as np
-from torchmetrics.functional.pairwise import pairwise_cosine_similarity
-import gc
 import argparse
 from tqdm import tqdm
+from ASIF import zero_shot_classification
 
 def main():
 
@@ -13,11 +12,12 @@ def main():
 
     parser.add_argument('--path_layer1', type=str, default='../experiments/layers/embeddings_layer6_wav2vec2.json') 
     parser.add_argument('--path_layer2', type=str, default='../experiments/layers/embeddings_layer3_bert-base-uncased.json') 
-    parser.add_argument('--keys', type=str, default='words_in_order.json') 
+    parser.add_argument('--p', type=int, default=1) 
+    parser.add_argument('--k', type=int, default=4221) 
+    parser.add_argument('--keys', type=str, default='words_in_order1.json') 
     args = parser.parse_args()
-
-    retrieval = []
-
+    
+    # Upload the matrices
     with open(args.path_layer1, 'r') as f:
         audio = np.array(json.load(f))
 
@@ -27,65 +27,31 @@ def main():
     with open(args.keys, 'r') as f:
         keys = json.load(f)
 
-    n = audio.shape[0]
 
-    # Eliminamos el 10% de las filas para retrieval
+    all_values = [value for values_list in keys.values() for value in values_list]
+    n = audio.shape[0]
     np.random.seed(2211) 
-    rows_to_delete = np.random.choice(n, int(n*0.1), replace=False)
+    rows_to_delete = np.random.choice(n, int(n*0.1), replace=False) # Eliminamos el 10% de las filas para retrieval
     deleted_rows = audio[rows_to_delete]  # Guardamos los indices de las filas eliminadas
     audio_new = np.delete(audio, rows_to_delete, axis=0)
     nlp_new = np.delete(nlp, rows_to_delete, axis=0)
-    keys_new = np.delete(keys, rows_to_delete)
+    keys_new = np.delete(all_values, rows_to_delete)
     
-    p = 8
-    size = n - int(n*0.1)
-    k = 800
-    print(int(n*0.1), k, size) 
-
-    # Procesamos matriz de similaridad de nlp
-    
-    large_matrix = torch.zeros(size, size, dtype=torch.float32, device='cpu')
     audio_new = torch.from_numpy(audio_new)
     nlp_new = torch.from_numpy(nlp_new)
-    batch_size = 5000
-    for i in range(0,  size, batch_size):
-        end = min(i + batch_size,  size)
-        batch_embeddings = nlp_new[i:end]
-        output = pairwise_cosine_similarity(batch_embeddings, nlp_new)
-        values, indices = torch.topk(output, k=k, dim=1)
-        zero_matrix = torch.zeros_like(output)
+    to_predict = torch.from_numpy(deleted_rows)
 
-        for row_idx, col_indices in enumerate(indices):
-            zero_matrix[row_idx, col_indices] = values[row_idx] ** p
+    total_anchors = len(audio_new)  # Assuming aimgs and atxts are the same length
+    range_anch = range(total_anchors, total_anchors + 1)
 
-        large_matrix[i:end,:] = zero_matrix
-
-        del output, zero_matrix
-        gc.collect()
-        
-    # Norrmalizamos
-    norms = large_matrix.norm(p=2, dim=1, keepdim=True)
-    large_matrix_normalized = large_matrix / norms
+    n_anchors, sims = zero_shot_classification(to_predict, nlp_new, audio_new, nlp_new, non_zeros=args.k, 
+                                               range_anch = range_anch, val_exps=[args.p], dic_size = 100_000, max_gpu_mem_gb = 8.)
     
-    # Hacemos retrieval de palabra
-    batch_size = 10000
-    for j in tqdm(range(int(n*0.1))):
-        audio_rep = torch.from_numpy(deleted_rows[j])
-        relative_rep = pairwise_cosine_similarity(audio_rep.unsqueeze(0).double(), audio_new) # Representacion relativa de input
-        similarity_results = []
-        for i in range(0, size, batch_size):
-            end = min(i + batch_size, size)
-            batch = large_matrix_normalized[i:end, :] 
-            similarity = pairwise_cosine_similarity(relative_rep.float(), batch)
-            similarity_results.extend(similarity.cpu())
-        full_similarity = torch.cat(similarity_results, dim=0)    
-        values, indices = torch.topk(full_similarity, k=6)
-        retrieval.append([keys[rows_to_delete[j]], [keys_new[index.item()] for index in indices]])
+    info = {'retrieval': sims.tolist(),
+            'rows_deleted': rows_to_delete.tolist(),
+            'keys_anchors': keys_new.tolist()}
     
-    info = {'words_retrieval': retrieval,
-            'rows_deleted': rows_to_delete.tolist()}
-    
-    with open(os.path.join('results',f'retrieval_a_p{p}_k{k}.json'), 'w') as f:
+    with open(os.path.join('results',f'retrieval_a_p{args.p}_k{args.k}.json'), 'w') as f:
         json.dump(info, f)     
 
 if __name__ == '__main__':

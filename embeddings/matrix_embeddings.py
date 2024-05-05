@@ -41,7 +41,7 @@ def main():
             json.dump(model1_vectors, f) 
 
     
-    process_embedding_files_and_create_matrices('../experiments', layer=args.layer, model1=args.model, words_path=args.words_path)
+    process_embedding_files_and_create_matrices('../experiments/encodecmaes-v2', layer=args.layer, model1=args.model, words_path=args.words_path)
 
 if __name__ == "__main__":
     main()
