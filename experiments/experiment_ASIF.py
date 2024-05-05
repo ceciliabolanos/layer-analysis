@@ -12,8 +12,8 @@ def main():
 
     parser.add_argument('--path_layer1', type=str, default='../experiments/layers/embeddings_layer6_wav2vec2.json') 
     parser.add_argument('--path_layer2', type=str, default='../experiments/layers/embeddings_layer3_bert-base-uncased.json') 
-    parser.add_argument('--p', type=int, default=1) 
     parser.add_argument('--k', type=int, default=4221) 
+    parser.add_argument('--p', type=int, default=1) 
     parser.add_argument('--keys', type=str, default='words_in_order1.json') 
     args = parser.parse_args()
     
@@ -41,7 +41,7 @@ def main():
     nlp_new = torch.from_numpy(nlp_new)
     to_predict = torch.from_numpy(deleted_rows)
 
-    total_anchors = len(audio_new)  # Assuming aimgs and atxts are the same length
+    total_anchors = len(audio_new) 
     range_anch = range(total_anchors, total_anchors + 1)
 
     n_anchors, sims = zero_shot_classification(to_predict, nlp_new, audio_new, nlp_new, non_zeros=args.k, 
