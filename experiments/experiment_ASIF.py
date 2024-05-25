@@ -31,7 +31,7 @@ def main():
     all_values = [value for values_list in keys.values() for value in values_list]
     n = audio.shape[0]
     np.random.seed(2211) 
-    rows_to_delete = np.random.choice(n, int(n*0.1), replace=False) # Eliminamos el 10% de las filas para retrieval
+    rows_to_delete = np.random.choice(n, int(n*0.15), replace=False) # Eliminamos el 10% de las filas para retrieval
     deleted_rows = audio[rows_to_delete]  # Guardamos los indices de las filas eliminadas
     audio_new = np.delete(audio, rows_to_delete, axis=0)
     nlp_new = np.delete(nlp, rows_to_delete, axis=0)
