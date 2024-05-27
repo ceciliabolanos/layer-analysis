@@ -11,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser(description='')
 
     parser.add_argument('--path_layer1', type=str, default='../experiments/layers/embeddings_layer6_wav2vec2.json') 
-    parser.add_argument('--path_layer2', type=str, default='../experiments/layers/embeddings_layer3_bert-base-uncased.json') 
+    parser.add_argument('--path_layer2', type=str, default='../experiments/layers/embeddings_layer0_glove.json') 
     parser.add_argument('--k', type=int, default=4221) 
     parser.add_argument('--p', type=int, default=1) 
     parser.add_argument('--keys', type=str, default='words_in_order1.json') 
@@ -46,12 +46,22 @@ def main():
 
     n_anchors, sims = zero_shot_classification(to_predict, nlp_new, audio_new, nlp_new, non_zeros=args.k, 
                                                range_anch = range_anch, val_exps=[args.p], dic_size = 100_000, max_gpu_mem_gb = 8.)
-    
-    info = {'retrieval': sims.tolist(),
+    values, indices = torch.topk(sims, k=5)
+
+    info = {'retrieval_values': values.tolist(),
+            'retrieval_indices': indices.tolist(),
             'rows_deleted': rows_to_delete.tolist(),
-            'keys_anchors': keys_new.tolist()}
+            'keys_anchors': keys_new.tolist(),
+            'all_values': all_values}
     
-    with open(os.path.join('results',f'retrieval_a_p{args.p}_k{args.k}.json'), 'w') as f:
+    file_name1 = args.path_layer1.split('/')[-1]
+    layer_part1 = file_name1.split('_')[1]  # Extract the layer part (e.g., "layer6")
+    name_part1 = file_name1.split('_')[-1].split('.')[0] 
+    file_name2 = args.path_layer2.split('/')[-1]
+    layer_part2 = file_name2.split('_')[1] 
+    name_part2 = file_name2.split('_')[-1].split('.')[0] 
+    with open(os.path.join('results',
+                           f'retrieval_{name_part1}_{layer_part1}_{name_part2}_{layer_part2}_p{args.p}_k{args.k}.json'), 'w') as f:
         json.dump(info, f)     
 
 if __name__ == '__main__':
