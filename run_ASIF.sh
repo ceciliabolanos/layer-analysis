@@ -48,16 +48,53 @@ keys="words_in_order1.json"
 
 # Do we have the same tendency with ASIF zero-shot?
 
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer0_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer1_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer2_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer3_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer4_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer5_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer7_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer8_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer9_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer10_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
-python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer11_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer0_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer1_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer2_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer3_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer4_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer5_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer7_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer8_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer9_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer10_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
+# python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer11_wav2vec2.json" --path_layer2 $path_layer2 --k 250 --p 6 --keys $keys
 
 # Experiment3_text_vs_speech: Can ASIF be equivalent to CKA metric?. Saved in results/experiment3_text_vs_speech
+
+for i in {0..11}
+do
+    for j in {0..11}
+    do
+        python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer${i}_wav2vec2.json" --path_layer2 "../experiments/layers/embeddings_layer${j}_bert-base-uncased.json" --k 250 --p 6 --keys $keys
+    done
+done
+
+# Experiment3_audio_vs_text: Can ASIF be equivalent to CKA metric?. Saved in results/experiment3_audio_vs_text
+
+for i in {0..11}
+do
+    for j in {0..11}
+    do
+        python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer${i}_BEATs_iter3.json" --path_layer2 "../experiments/layers/embeddings_layer${j}_bert-base-uncased.json" --k 250 --p 6 --keys $keys
+    done
+done
+
+for i in {0..11}
+do
+    for j in {0..11}
+    do
+        python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer${i}_encodecmae_base.json" --path_layer2 "../experiments/layers/embeddings_layer${j}_bert-base-uncased.json" --k 250 --p 6 --keys $keys
+    done
+done
+
+for i in {0..11}
+do
+    python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer${i}_encodecmae_base.json" --path_layer2 "../experiments/layers/embeddings_layer0_glove.json" --k 250 --p 6 --keys $keys
+done
+
+for i in {0..11}
+do
+    python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer${i}_BEATs_iter3.json" --path_layer2 "../experiments/layers/embeddings_layer0_glove.json" --k 250 --p 6 --keys $keys
+done
+
