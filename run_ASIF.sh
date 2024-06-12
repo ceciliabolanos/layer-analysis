@@ -146,10 +146,24 @@ path_layer4="../experiments/layers/embeddings_layer3_bert-base-uncased.json"
 # done
 
 
-for i in {0..11}
+# for i in {0..11}
+# do
+#     for j in {0..11}
+#     do
+#         python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer${i}_wav2vec2.json" --path_layer2 "../experiments/layers/embeddings_layer${j}_bert-base-uncased.json" --k 100 --p 4 --keys $keys
+#     done
+# done
+
+
+# for i in {0..9}
+# do
+#     for j in {0..11}
+#     do
+#         python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer${i}_encodecmae_mel256-ec-base.json" --path_layer2 "../experiments/layers/embeddings_layer${j}_bert-base-uncased.json" --k 100 --p 4 --keys $keys
+#     done
+# done
+
+for i in {0..9}
 do
-    for j in {0..11}
-    do
-        python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer${i}_wav2vec2.json" --path_layer2 "../experiments/layers/embeddings_layer${j}_bert-base-uncased.json" --k 100 --p 4 --keys $keys
-    done
+    python3 experiments/experiment_ASIF.py --path_layer1 "../experiments/layers/embeddings_layer${i}_encodecmae_mel256-ec-base.json" --path_layer2 "../experiments/layers/embeddings_layer0_glove.json" --k 250 --p 6 --keys $keys
 done

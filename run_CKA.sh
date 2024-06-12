@@ -60,3 +60,6 @@
 # python3 experiments/experiment_CKA.py --model1 'encodecmae_mel256-ec-base-as' --layer1 10 --model2 'encodecmae_mel256-ec-base-fma' --layer2 10
 # python3 experiments/experiment_CKA.py --model1 'encodecmae_mel256-ec-base-as' --layer1 10 --model2 'encodecmae_mel256-ec-base-ll' --layer2 10
 # python3 experiments/experiment_CKA.py --model1 'encodecmae_mel256-ec-base-fma' --layer1 10 --model2 'encodecmae_mel256-ec-base-ll' --layer2 10
+
+# python3 experiments/experiment_CKA.py --model1 'encodecmae_mel256-ec-base' --layer1 10 --model2 'glove' --layer2 10
+python3 experiments/experiment_CKA.py --model1 'encodecmae_mel256-ec-base' --layer1 10 --model2 'bert-base-uncased' --layer2 12
