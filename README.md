@@ -59,20 +59,20 @@ python3 embeddings/glove_embedding.py --path 'alignments/audio_alignments_20_16.
 python3 embeddings/nlp_embedding.py --model bert-base-uncased --path 'alignments/audio_alignments_20_16.json' --device 'cuda'
 ```
 
-**Modelos de Audio**
+**Audio models**
 
 We consider models that were pretrained for speech tasks as well as more general audio tasks. In the case of models trained for ASR, we used wav2vec2, but the code is designed to support any speech processing model implemented in s3prl. 
 We also consider models that were trained for general audio tasks. Currently, the code supports the models `encodecmae_base` and `BEATs_iter3`, but it can be easily adapted to calculate the embeddings of any model implemented at https://github.com/mrpep/easyaudio. 
 
 It is crucial to use the JSON file corresponding to the alignment with the appropriate sampling frequency and stride for each specific model.
 
-**Speech models**
+**Speech**
 
 ```bash
 python3 embeddings/speech_embedding.py --model wav2vec2_large_960 --path 'alignments/audio_alignments_20_16.json' --device 'cuda'
 ```
 
-**Audio models**
+**General Audio**
 
 ```bash
 python3 embeddings/audio_embeddings.py --model encodecmae_base --path 'alignments/audio_alignments_13.33_24.json' --device 'cuda'
@@ -110,4 +110,4 @@ python experiments/experiment_ASIF.py --path_layer1 '../experiments/layers/embed
 It is important to note that ASIF has hyperparameters (`k` and `p`) that need fine-tuning to optimize performance.
 
 
-This README has outlined all the necessary code required for running the experiments described in this project. All pre-run results are stored and readily accessible in the results folder.
+This README has outlined all the necessary code required for running the experiments described in my thesis. All pre-run results are stored and readily accessible in the `results` folder.
