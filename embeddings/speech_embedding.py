@@ -7,14 +7,6 @@ from tqdm import tqdm
 import numpy as np
 import torch
 
-"""
-Info that I've learned from sp3prl:
-  reps = model(waveform)["hidden_states"]
-  reps[0] output cnns
-  reps[i] for i in 1 to len-1 -> hidden state for layer i
-  reps[i][j] hidden state for layer i and audio j
-  reps[i][j][k] hidden state for layer i and audio j and frame k (waveform can be more that such 1 audio)
-"""
 
 def main():
 
@@ -33,7 +25,7 @@ def main():
     with open(args.path, 'r') as f:
         data = json.load(f)
 
-    model = getattr(hub, args.model)()  # build the model with pre-trained weights
+    model = getattr(hub, args.model)() 
     model = model.to(args.device)
 
     # For every audio, process each word and save its averaged embeddings   

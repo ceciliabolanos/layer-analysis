@@ -9,13 +9,6 @@ import sys
 sys.path.insert(0, '../layer-analysis')
 from easyaudio.easyaudio.hub import get_model
 
-"""
-Info that I've learned from easyaudio:
-  reps = model(waveform)["hidden_states"]
-  reps[i] for i in 0 to len-1 -> hidden state for layer i
-  reps[i][j] hidden state for layer i and frame j
-"""
-
 def main():
     np.random.seed(42)
     torch.manual_seed(42)

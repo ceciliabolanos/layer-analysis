@@ -5,7 +5,7 @@ import torch
 import numpy as np
 
 
-# Modelos de lenguaje
+# Text models
 
 def get_embeddings_nlp(encoded_input, model, device):
     """
@@ -34,7 +34,6 @@ def get_embeddings_glove(input_text, glove_embeddings):
     return embeddings   
 
 def unite_subword_tokens(tokens):
-    # Create an empty list to store the united tokens
     united_tokens = []
     for token in tokens:
         if token.startswith("##"):
@@ -70,7 +69,7 @@ def load_glove_embeddings(file_path):
             embeddings_dict[word] = vector
     return embeddings_dict
 
-# Modelos de habla 
+# Speech models
 
 def get_embedding_across_layers(start_frame, end_frame, reps):
     """
@@ -95,7 +94,7 @@ def get_embeddings_speech(audio_path, model, device):
   
     return reps 
 
-# Modelos de audio 
+# Audio models 
 
 def get_embeddings_audio(audio_path, model, device):
     """
@@ -124,7 +123,6 @@ def get_embedding_across_layers_audio(start_frame, end_frame, reps, model):
         patch_start = (start_frame // 16) * 8
         patch_end = (start_frame // 16) * 8
         if len(reps[0]) < patch_start:
-            print('hola', patch_start, len(reps[0]))
             return averaged_reps    
         for i in range(1, len(reps)): 
             if len(reps[i]) > patch_end:
@@ -134,7 +132,7 @@ def get_embedding_across_layers_audio(start_frame, end_frame, reps, model):
             averaged_reps.append(averaged_rep)
     return averaged_reps   
 
-# Varias
+# Others
 
 def save_json_with_embedding(fname, audio, embeddings):
     """Save Json with the embedding of each word/phone of an audio"""
