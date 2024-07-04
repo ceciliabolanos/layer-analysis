@@ -98,3 +98,16 @@ python3 experiments/experiment_CKA.py --model1 'bert-base-uncased' --layer1 12 -
 ``` 
 
 ## ASIF:
+
+We explore a technique that extends beyond traditional metrics like CCA and CKA, which indicate similarity between representation spaces but lack detailed insights into how specific words are represented by different models. ASIF offers a deeper interpretation by evaluating the proximity of corresponding audio and text representations in a shared space. The experiment focuses on calculating the zero-shot accuracy using two layers from an audio model and a text model, further quantifying how these modalities converge in a shared representational space.
+
+The `experiment_ASIF.py` script is designed to perform embedding retrieval experiments. The retrieval results, including the values and indices of the retrieved embeddings and the indices of the deleted rows, are stored in a JSON file. 
+
+```bash
+python experiments/experiment_ASIF.py --path_layer1 '../experiments/layers/embeddings_layer6_wav2vec2.json' --path_layer2 '../experiments/layers/embeddings_layer0_glove.json' --k 600 --p 4 --keys 'words_in_order1.json'
+``` 
+
+It is important to note that ASIF has hyperparameters (`k` and `p`) that need fine-tuning to optimize performance.
+
+
+This README has outlined all the necessary code required for running the experiments described in this project. All pre-run results are stored and readily accessible in the results folder.

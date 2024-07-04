@@ -35,15 +35,15 @@ def main():
             cka_similarity[i, j] = linear_CKA(model1_matrix, model2_matrix)
       
     with open(f'cka_{args.model2}_{args.model1}.json', 'w') as f:
-        json.dump(cka_similarity.tolist(), f)
-
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(cka_similarity, fmt=".1f", cmap='viridis', cbar_kws={'label': 'CKA (Linear)'})
-    plt.xlabel(f"Layer {args.model2}")
-    plt.ylabel(f"Layer {args.model1}")
-    plt.ylim(0, len(cka_similarity))
-    plt.savefig(f'cka_{args.model2}_{args.model1}.png', bbox_inches='tight') 
-    plt.show()
+        json.dump(cka_similarity.tolist(), f)  
+     
+    # plt.figure(figsize=(8, 6))
+    # sns.heatmap(cka_similarity, fmt=".1f", cmap='viridis', cbar_kws={'label': 'CKA (Linear)'})
+    # plt.xlabel(f"Layer {args.model2}")
+    # plt.ylabel(f"Layer {args.model1}")
+    # plt.ylim(0, len(cka_similarity))
+    # plt.savefig(f'cka_{args.model2}_{args.model1}.png', bbox_inches='tight') 
+    # plt.show()
 
 
 if __name__ == '__main__':

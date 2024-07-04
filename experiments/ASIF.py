@@ -1,3 +1,6 @@
+# This script has been adapted from the ASIF project by noranta4
+# Source: https://github.com/noranta4/ASIF
+
 from typing import Tuple, List, Type, Union
 import torch
 from tqdm import tqdm
