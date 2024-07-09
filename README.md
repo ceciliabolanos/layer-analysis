@@ -97,7 +97,7 @@ We calculate Linear_CKA(X, Y) where X and Y are the representations of each word
 python3 experiments/experiment_CKA.py --model1 'bert-base-uncased' --layer1 12 --model2 'wav2vec2_large_960' --layer2 24
 ``` 
 
-## ASIF:
+**ASIF:**
 
 We explore a technique that extends beyond traditional metrics like CCA and CKA, which indicate similarity between representation spaces but lack detailed insights into how specific words are represented by different models. ASIF offers a deeper interpretation by evaluating the proximity of corresponding audio and text representations in a shared space. The experiment focuses on calculating the zero-shot accuracy using two layers from an audio model and a text model, further quantifying how these modalities converge in a shared representational space.
 
