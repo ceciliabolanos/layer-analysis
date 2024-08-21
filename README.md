@@ -15,8 +15,8 @@ This repository allows you to replicate several key experiments (all of them can
 
 ### 2. Cross-Model Representation Similarity
 
-- You can run a combination of metrics (Linear CKA or ASIF) with a pair of models (Wav2Vec 2.0, EncodecMAE, BERT, GloVe, BEATs) to understand how similar their representations are and highlight the differences.
-- For example, when we run Linear CKA for EncodecMAE-GloVe and Wav2Vec 2.0-GloVe, we get results like this:
+- You can run a specific metric (Linear CKA or ASIF) with a pair of models (Wav2Vec 2.0, EncodecMAE, BERT, GloVe, BEATs) to understand how similar their representations are and highlight the differences.
+- For example, when we run Linear CKA for EncodecMAE-BERT and Wav2Vec 2.0-BERT, we get this results:
 
 ![CKA BERT Result](images/cka_bert.png)
 
@@ -27,12 +27,12 @@ This repository allows you to replicate several key experiments (all of them can
 - Using the ASIF metric (which works as a retrieval method), we discovered that when analyzing the words retrieved from the representations of an audio model to the representations of a text model, they were more similar phonetically than semantically.
 - You can replicate experiments to investigate whether words are encoded more by phonetic or semantic features in audio models, especially using Wav2Vec and EncodecMAE.
 
- [Insert image here]
+![Phonetic and semantic Result](images/phonetic_semantic.png)
 
-- This experiment provides insights into how audio models process and represent language, which can be crucial for understanding their behavior and potential biases.
+- This experiment provides insights into how audio models process and represent language.
 
 
-<details><summary>More details on how to run and prepare your code</summary>
+<details><summary>More details on how to run and replicate results</summary>
 
 ## Description
 
