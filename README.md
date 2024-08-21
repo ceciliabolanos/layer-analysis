@@ -27,7 +27,7 @@ This repository allows you to replicate several key experiments (all of them can
 - Using the ASIF metric (which works as a retrieval method), we discovered that when analyzing the words retrieved from the representations of an audio model to the representations of a text model, they were more similar phonetically than semantically.
 - You can replicate experiments to investigate whether words are encoded more by phonetic or semantic features in audio models, especially using Wav2Vec and EncodecMAE.
 
-![Phonetic and semantic Result](images/phonetic_semantic.png)
+![Phonetic and semantic Result](images/semantic_phonetic.png)
 
 - This experiment provides insights into how audio models process and represent language.
 
